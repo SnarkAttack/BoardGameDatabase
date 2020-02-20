@@ -1,5 +1,7 @@
 {% extends 'boardgames/base.html' %}
 
+{% load game_index_extras %}
+
 {% block title %}Board Games{% endblock %}
 
 {% block content %}
@@ -35,6 +37,7 @@
                     </ol>
             </li>
             {% endif %}
+            <li>Times Played: {{ boardgame.plays|get_play_count }}</li>
         </ul>
     {% else %}
         <p>No boardgames are available.</p>
