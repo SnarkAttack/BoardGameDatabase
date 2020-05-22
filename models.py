@@ -1,10 +1,10 @@
 from django.db import models
 
 class Player(models.Model):
-    bgstats_id = models.IntegerField(unique=True, null=True)
-    player_name = models.CharField(max_length=32, null=True)
+    #bgstats_id = models.IntegerField(unique=True, null=True)
+    player_name = models.CharField(unique=True, max_length=32, null=True)
     bgg_username = models.CharField(max_length=32, null=True)
-    bgstats_uuid = models.CharField(max_length=36, unique=True, null=True)
+    bgg_id = models.IntegerField(null=True)
 
 class BoardGameCategory(models.Model):
     category_name = models.CharField(max_length=128)
@@ -21,7 +21,7 @@ class BoardGame(models.Model):
     name = models.CharField(max_length=256)
     min_players = models.IntegerField(null=True)
     max_players = models.IntegerField(null=True)
-    best_with = models.IntegerField(null=True)
+    best_with = models.CharField(max_length=4, null=True)
     len_m = models.IntegerField(null=True)
     min_len_m = models.IntegerField(null=True)
     max_len_m = models.IntegerField(null=True)
@@ -45,7 +45,7 @@ class Play(models.Model):
     ignore = models.BooleanField(null=True)
     comments = models.CharField(max_length=512, null=True)
     difficulty = models.CharField(max_length=64, null=True)
-    play_uuid = models.CharField(max_length=36, unique=True)
+    play_id = models.IntegerField(unique=True)
 
 class PlayerScore(models.Model):
     player = models.ForeignKey(Player, on_delete=models.SET_NULL, related_name='scores', null=True)

@@ -1,0 +1,2 @@
+def str_repr_int(str_to_test):
+	return len(str_to_test) > 0 and (all(str_to_test[i] in "0123456789" for i in range(len(str_to_test))) or (str_to_test[0] in "+-" and all(str_to_test[i] in "0123456789" for i in range(1,len(str_to_test)))))

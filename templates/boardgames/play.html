@@ -1,0 +1,25 @@
+{% extends 'boardgames/base.html' %}
+
+{% load game_index_extras %}
+
+{% block title %}Board Games{% endblock %}
+
+{% block content %}
+    {% if play %}
+        <ul>
+            <li>Game: {{play.game.name}}</li>
+            <li>Players:             
+                <ol>
+                {% for player_score in play.player_scores.all %}
+                    <li>{{ player_score.player.player_name }}
+                        {% if player_score.winner %}
+                            {{ "Winner" }}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                </ol></li>
+        </ul>
+    {% else %}
+        <p>No play found.</p>
+    {% endif %}
+{% endblock %}
