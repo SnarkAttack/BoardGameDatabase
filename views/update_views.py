@@ -34,7 +34,7 @@ def create_or_update_player_score_model(player_score_data, player_score):
     #team = player_score_data.get('team', '')
     #player_score.team = team if str_repr_int(team) else None
     # This field is required
-    player_score.winner = True if player_score_data.get('win') == 1 else 0
+    player_score.winner = True if player_score_data.get('win') != '0' else False
 
     return True
 
@@ -143,7 +143,7 @@ class UpdatePlaysView(View):
                     create_or_update_player_model(player_data, player)
                     player.save()
                     
-                    player_score, _ = play_obj.player_scores.get_or_create(player=player)
+                    player_score, _ = play_obj.scores.get_or_create(player=player)
                     create_or_update_player_score_model(player_data, player_score)
                     player_score.play = play_obj
                     player_score.save()
@@ -166,22 +166,19 @@ class UpdateCollectionView(View):
         
         pybgg_int = PyBggInterface()
         
-        collection_data = pybgg_int.collection_request(username, own=1, exclude_subtype='boardgame_expansion')
-        collection_data = collection_data['items']['item']
-
+        collection_data = pybgg_int.collection_request(username, own=1, excludesubtype='boardgameexpansion')['items']['item']
+        
         for game in collection_data:
-             
             game_data = pybgg_int.thing_item_request(id=game['objectid'], stats=1)['items']['item']
             obj, created = BoardGame.objects.get_or_create(bgg_id=game_data['id'])
             create_or_update_board_game_model(obj, game_data)
             obj.owners.add(Player.objects.get_or_create(bgg_username=username)[0])
-            obj.save()
+            obj.save()        
         
         expansions_data = pybgg_int.collection_request(username, own=1, subtype='boardgameexpansion')['items']['item']
 
         for expansion in expansions_data:
             expansion_data = pybgg_int.thing_item_request(id=expansion['objectid'], stats=1)['items']['item']
-            
             exp, created = BoardGameExpansion.objects.get_or_create(bgg_id=expansion_data['id'])
             create_or_update_board_game_model(exp, expansion_data)
             #TODO: This is cheating!

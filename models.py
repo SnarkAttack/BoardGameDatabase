@@ -41,14 +41,14 @@ class BoardGame(models.Model):
 
 class Play(models.Model):
     game = models.ForeignKey(BoardGame, on_delete=models.SET_NULL, related_name='plays', null=True)
-    play_date = models.DateTimeField(null=True)
+    play_date = models.DateField(null=True)
     ignore = models.BooleanField(null=True)
     comments = models.CharField(max_length=512, null=True)
     difficulty = models.CharField(max_length=64, null=True)
     play_id = models.IntegerField(unique=True)
 
 class PlayerScore(models.Model):
-    player = models.ForeignKey(Player, on_delete=models.SET_NULL, related_name='scores', null=True)
+    player = models.ForeignKey(Player, on_delete=models.SET_NULL, related_name='player_score', null=True)
     score = models.IntegerField(null=True, default=0)
     role = models.CharField(max_length=64, null=True)
     start_player = models.BooleanField(default=False)
@@ -56,7 +56,7 @@ class PlayerScore(models.Model):
     new_player = models.BooleanField(default=False)
     team = models.IntegerField(null=True)
     winner = models.BooleanField(null=True)
-    play = models.ForeignKey(Play, on_delete=models.CASCADE, related_name='player_scores')
+    play = models.ForeignKey(Play, on_delete=models.CASCADE, related_name='scores')
 
 class BoardGameExpansion(BoardGame):
     base_game = models.ForeignKey(BoardGame, on_delete=models.CASCADE, related_name='expansions', null=True)

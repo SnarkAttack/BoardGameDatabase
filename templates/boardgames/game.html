@@ -39,6 +39,28 @@
             {% endif %}
             <li>Times Played: {{ boardgame.plays|get_play_count }}</li>
         </ul>
+        <h2>Game Statistics</h2>
+        <div>
+            <p>Number of times played</p>
+            <ul>
+                {% for player, player_stats in game_stats.items %}
+                    <li>{{player}}: {{player_stats.plays}}</li>
+                {% endfor %}
+            </ul>
+            <ul>
+                {% for player, player_stats in game_stats.items %}
+                    <li>{{player}}: {{player_stats.wins}}</li>
+                {% endfor %}
+            </ul>
+            <ul>
+                {% for player, player_stats in game_stats.items %}
+                    <li>{{player}}: {{player_stats.time_last_played}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% autoescape off %}
+        {{ stats_graph }}
+        {% endautoescape %}
     {% else %}
         <p>No boardgames are available.</p>
     {% endif %}
