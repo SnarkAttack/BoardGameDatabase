@@ -111,30 +111,30 @@
     {% endif %}
     <h2>Expansions</h2>
     {% if expansions_list %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Rating</th>
-                <th scope="col">Weight</th>
-                <th scope="col">Min Players</th>
-                <th scope="col">Max Players</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for expansion in expansions_list %}
+        <table class="table">
+            <thead>
                 <tr>
-                    <td scope="row">
-                        <a href="/boardgames/games/{expansion.id}}/">{{expansion.name}}</a>
-                    </td>
-                    <td>{{expansion.average}}</td>
-                    <td>{{expansion.weight}}</td>
-                    <td>{{expansion.min_players}}</td>
-                    <td>{{expansion.max_players}}</td>
+                    <th scope="col">Name</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Weight</th>
+                    <th scope="col">Min Players</th>
+                    <th scope="col">Max Players</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for expansion in expansions_list %}
+                    <tr>
+                        <td scope="row">
+                            <a href="/boardgames/games/{expansion.id}}/">{{expansion.name}}</a>
+                        </td>
+                        <td>{{expansion.average}}</td>
+                        <td>{{expansion.weight}}</td>
+                        <td>{{expansion.min_players}}</td>
+                        <td>{{expansion.max_players}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
         <p>No expansions are available.</p>
     {% endif %}
