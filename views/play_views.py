@@ -3,9 +3,21 @@ from django.views import View
 from ..models import BoardGame, Player, Play
 from django.template import loader
 
+class PlayIndexView(View):
+    
+    def get(self, request):
+        plays = Play.objects.all()[:10]
+        for play in plays:
+            print(play.game.name)
+        template = loader.get_template('boardgames/play_index.html')
+        context = {
+            'plays': plays,
+        }
+        return HttpResponse(template.render(context, request))
+
 class PlayView(View):
+    
     def get(self, request, play_id):
-        
         play = Play.objects.get(id=play_id)
         template = loader.get_template('boardgames/play.html')
         context = {

@@ -1,0 +1,32 @@
+{% extends 'boardgames/base.html' %}
+
+{% load play_index_extras %}
+
+{% block title %}Board Games{% endblock %}
+
+{% block content %}
+{% if plays %}
+    <table class="table" id="boardgame_table">
+        <thead>
+            <tr>
+                <th>Game</th>
+                <th>Number of Players</th>
+                <th>Winner</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for play in plays %}
+                <tr>
+                    <td>{{play.game.name}}</td>
+                    <td>{{play.scores.count}}</td>
+                    <td>{{play|get_winner}}</td>
+                    <td>{{play.play_date}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No play</p>
+{% endif %}
+{% endblock %}

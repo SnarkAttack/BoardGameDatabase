@@ -13,9 +13,11 @@ def generate_basic_game_stats_graph(game_stats):
     import plotly.graph_objects as go
     from plotly.offline import plot
     
-    labels = list(game_stats.keys())
-    wins = [game_stats[player]['wins'] for player in game_stats.keys()]
-    plays_diff = [game_stats[player]['plays']-game_stats[player]['wins'] for player in game_stats.keys()]
+    game_players = list(reversed(sorted(game_stats, key=lambda k: game_stats[k]['plays'])))
+    
+    labels = game_players
+    wins = [game_stats[player]['wins'] for player in game_players]
+    plays_diff = [game_stats[player]['plays']-game_stats[player]['wins'] for player in game_players]
     
     fig = go.Figure(
         data = [

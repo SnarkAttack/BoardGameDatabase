@@ -13,4 +13,5 @@ urlpatterns = [
     path('mechanics/', views.MechanicIndexView.as_view(), name='mechanics_index'),
     path('statistics/', views.BoardGameStatisticsView.as_view(), name='statistics'),
     path('plays/<int:play_id>/', views.PlayView.as_view(), name='play'),
+    path('plays/', views.PlayIndexView.as_view(), name='play_index'),
 ]
