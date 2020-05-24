@@ -48,7 +48,7 @@ class Play(models.Model):
     play_id = models.IntegerField(unique=True)
 
 class PlayerScore(models.Model):
-    player = models.ForeignKey(Player, on_delete=models.SET_NULL, related_name='player_score', null=True)
+    player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='player_score', null=True)
     score = models.IntegerField(null=True, default=0)
     role = models.CharField(max_length=64, null=True)
     start_player = models.BooleanField(default=False)

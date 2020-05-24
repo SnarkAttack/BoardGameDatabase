@@ -152,7 +152,7 @@ class UpdatePlaysView(View):
             total_plays -= plays_per_page
             plays = pybgg_int.plays_request(username=username, page=page)
 
-        return HttpResponseRedirect(reverse('game_index'))
+        return HttpResponseRedirect(reverse('play_index'))
     
 class UpdateCollectionView(View):
     
@@ -172,7 +172,7 @@ class UpdateCollectionView(View):
             game_data = pybgg_int.thing_item_request(id=game['objectid'], stats=1)['items']['item']
             obj, created = BoardGame.objects.get_or_create(bgg_id=game_data['id'])
             create_or_update_board_game_model(obj, game_data)
-            obj.owners.add(Player.objects.get_or_create(bgg_username=username)[0])
+            #obj.owners.add(Player.objects.get_or_create(bgg_username=username)[0])
             obj.save()        
         
         expansions_data = pybgg_int.collection_request(username, own=1, subtype='boardgameexpansion')['items']['item']

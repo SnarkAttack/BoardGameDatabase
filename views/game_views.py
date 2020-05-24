@@ -4,14 +4,14 @@ from ..models import BoardGame, BoardGameExpansion
 from django.template import loader
 from collections import defaultdict
 from datetime import date
+import plotly.graph_objects as go
+from plotly.offline import plot
 
 from functools import partial
 
 base_game_only_func = partial(BoardGame.objects.all().filter, boardgameexpansion__isnull=True)
 
 def generate_basic_game_stats_graph(game_stats):
-    import plotly.graph_objects as go
-    from plotly.offline import plot
     
     game_players = list(reversed(sorted(game_stats, key=lambda k: game_stats[k]['plays'])))
     

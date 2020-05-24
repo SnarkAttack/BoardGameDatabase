@@ -14,4 +14,6 @@ urlpatterns = [
     path('statistics/', views.BoardGameStatisticsView.as_view(), name='statistics'),
     path('plays/<int:play_id>/', views.PlayView.as_view(), name='play'),
     path('plays/', views.PlayIndexView.as_view(), name='play_index'),
+    path('players/<int:player_id>/', views.PlayerView.as_view(), name='player'),
+    path('players/', views.PlayerIndexView.as_view(), name='player_index'),
 ]
