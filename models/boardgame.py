@@ -1,10 +1,5 @@
 from django.db import models
-
-class Player(models.Model):
-    #bgstats_id = models.IntegerField(unique=True, null=True)
-    player_name = models.CharField(unique=True, max_length=32, null=True)
-    bgg_username = models.CharField(max_length=32, null=True)
-    bgg_id = models.IntegerField(null=True)
+from .player import Player
 
 class BoardGameCategory(models.Model):
     category_name = models.CharField(max_length=128)
@@ -38,26 +33,7 @@ class BoardGame(models.Model):
     highest_wins = models.BooleanField(null=True)
     cooperative = models.BooleanField(null=True)
     uses_teams = models.BooleanField(null=True)
-
-class Play(models.Model):
-    game = models.ForeignKey(BoardGame, on_delete=models.SET_NULL, related_name='plays', null=True)
-    play_date = models.DateField(null=True)
-    ignore = models.BooleanField(null=True)
-    comments = models.CharField(max_length=512, null=True)
-    difficulty = models.CharField(max_length=64, null=True)
-    play_id = models.IntegerField(unique=True)
-
-class PlayerScore(models.Model):
-    player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='player_score', null=True)
-    score = models.IntegerField(null=True, default=0)
-    role = models.CharField(max_length=64, null=True)
-    start_player = models.BooleanField(default=False)
-    seat_order = models.IntegerField(default=0)
-    new_player = models.BooleanField(default=False)
-    team = models.IntegerField(null=True)
-    winner = models.BooleanField(null=True)
-    play = models.ForeignKey(Play, on_delete=models.CASCADE, related_name='scores')
-
+    
 class BoardGameExpansion(BoardGame):
     base_game = models.ForeignKey(BoardGame, on_delete=models.CASCADE, related_name='expansions', null=True)
     
