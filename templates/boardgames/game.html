@@ -1,6 +1,7 @@
 {% extends 'boardgames/base.html' %}
 
 {% load game_index_extras %}
+{% load utilities %}
 
 {% block title %}Board Games{% endblock %}
 
@@ -128,7 +129,7 @@
                             <td>{{player}}</td>
                             <td>{{player_stats.plays}}</td>
                             <td>{{player_stats.wins}}</td>
-                            <td>{{player_stats.plays|game_win_percent:player_stats.wins}}</td>
+                            <td>{{player_stats.plays|win_percent:player_stats.wins}}</td>
                             <td>{{player_stats.time_last_played}}</td>
                         </tr>
                     {% endfor %}

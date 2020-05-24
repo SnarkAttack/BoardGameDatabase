@@ -5,28 +5,26 @@
 {% block title %}Board Games{% endblock %}
 
 {% block content %}
-    <h2>Player Stats</h2>
-    {% if players_stats %}
+    {% if player %}
+    <h2>{{player.player_name}}</h2>
         <table class="table" id="boardgame_table">
             <thead>
-                <tr>
-                    <th>Name</th>
+                <!-- <tr>
+                    <th>{{player.player_name}}</th>
                     <th>Wins</th>
                     <th>Win %</th>
-                    <th>Most Won</th>
-                </tr>
+                </tr> -->
             </thead>
             <tbody>
-                {% for player_name, player_stats in players_stats.items %}
+                <!-- {% for player in players %}
                     <tr>
                         <td scope="row">
-                            <a href="#">{{player_name}}</a>
+                            <a href="#">{{player.player_name}}</a>
                         </td>
-                        <td>{{player_stats.wins}}</td>
-                        <td>{{player_stats.win_percent}}</td>
-                        <td>{{player_stats.most_won}}</td>
+                        <td>{{player.win_count}}</td>
+                        <td></td>
                     </tr>
-                {% endfor %}
+                {% endfor %} -->
             </tbody>
         </table>
     {% else %}

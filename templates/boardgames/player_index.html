@@ -1,6 +1,6 @@
 {% extends 'boardgames/base.html' %}
 
-{% load game_index_extras %}
+{% load utilities %}
 
 {% block title %}Board Games{% endblock %}
 
@@ -66,26 +66,24 @@
             }).appendTo($tbody);
         }
     </script> 
-    <h2>Board Games</h2>
-    {% if players_stats %}
-        <table class="table" id="boardgame_table">
+    <h2>Players</h2>
+    {% if players %}
+        <table class="table" id="player_table">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Wins</th>
                     <th>Win %</th>
-                    <th>Most Won</th>
                 </tr>
             </thead>
             <tbody>
-                {% for player, player_stats in players_stats.items %}
+                {% for player in players %}
                     <tr>
                         <td scope="row">
                             <a href="/boardgames/players/{{player.id}}">{{player.player_name}}</a>
                         </td>
-                        <td>{{player_stats.wins}}</td>
-                        <td>{{player_stats.win_percent}}</td>
-                        <td>{{player_stats.most_won}}</td>
+                        <td>{{player.win_count}}</td>
+                        <td>{{player.play_count|win_percent:player.win_count}}</td>
                     </tr>
                 {% endfor %}
             </tbody>

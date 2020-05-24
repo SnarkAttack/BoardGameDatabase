@@ -1,17 +1,26 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
-from ..models import BoardGame, Player, Play, BoardGameCategory, BoardGameMechanic, BoardGameExpansion
+from ..models import BoardGame, Player, Play, BoardGameCategory, BoardGameMechanic, BoardGameExpansion, PlayerAgainstOthers
 from django.template import loader
 from pybgg_json import PyBggInterface
 
 from .utilities.conversion_utilities import str_repr_int
 
-def create_or_update_player_model(player_data, player):
+def won_game(player_data):
+    return player_data['win'] == '1'
+
+def create_or_update_player_model(player_data, player, play_created):
 
     player.player_name = player_data.get('name', None)
     player.bgg_username = player_data.get('username', None)
     player.bgg_id = player_data.get('userid', None)
+    
+    # Only update if we just created this play
+    if play_created:
+        player.play_count += 1
+        if won_game(player_data):
+            player.win_count += 1
 
     return True
 
@@ -34,7 +43,7 @@ def create_or_update_player_score_model(player_score_data, player_score):
     #team = player_score_data.get('team', '')
     #player_score.team = team if str_repr_int(team) else None
     # This field is required
-    player_score.winner = True if player_score_data.get('win') != '0' else False
+    player_score.winner = True if player_score_data.get('win') == '1' else False
 
     return True
 
@@ -123,7 +132,6 @@ class UpdatePlaysView(View):
         
         while total_plays-plays_per_page > 0:
         
-        
             for play in plays['plays']['play']:
 
                 game_data = play['item']
@@ -131,7 +139,7 @@ class UpdatePlaysView(View):
                 # Not trying to populate here
                 game.save()
 
-                play_obj, _ = Play.objects.get_or_create(play_id=play['id'])
+                play_obj, play_created = Play.objects.get_or_create(play_id=play['id'])
                 create_or_update_play_model(play, play_obj, game.bgg_id)
                 play_obj.save()
                 
@@ -140,13 +148,33 @@ class UpdatePlaysView(View):
                 
                 for player_data in player_info:
                     player, _ = Player.objects.get_or_create(player_name=player_data['name'])
-                    create_or_update_player_model(player_data, player)
+                    create_or_update_player_model(player_data, player, play_created)
                     player.save()
-                    
+                
+                for player_data in player_info:
+                    # We can guarantee this is here because we just made it
+                    player = Player.objects.get(player_name=player_data['name'])
                     player_score, _ = play_obj.scores.get_or_create(player=player)
                     create_or_update_player_score_model(player_data, player_score)
                     player_score.play = play_obj
                     player_score.save()
+                    
+                    # Check if play has just been created, we only want to update stats if it's
+                    # a new game
+                    if play_created:
+                    
+                        for opponent_data in [opponents for opponents in player_info if opponents['name'] != player_data['name']]:
+                            against_others, _ = PlayerAgainstOthers.objects.get_or_create(player=player, 
+                                                        opponent=Player.objects.get(player_name=opponent_data['name']))
+                            against_others.play_count += 1
+                            
+                            if won_game(player_data):
+                                against_others.win_count += 1
+                                
+                            if won_game(opponent_data):
+                                against_others.opp_win_count += 1
+                                
+                            against_others.save()
                     
             page += 1
             total_plays -= plays_per_page
