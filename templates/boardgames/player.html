@@ -1,0 +1,39 @@
+{% extends 'boardgames/base.html' %}
+
+{% load game_index_extras %}
+
+{% block title %}Board Games{% endblock %}
+
+{% block content %}
+    <h2>Player Stats</h2>
+    {% if players_stats %}
+        <table class="table" id="boardgame_table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Wins</th>
+                    <th>Win %</th>
+                    <th>Most Won</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player_name, player_stats in players_stats.items %}
+                    <tr>
+                        <td scope="row">
+                            <a href="#">{{player_name}}</a>
+                        </td>
+                        <td>{{player_stats.wins}}</td>
+                        <td>{{player_stats.win_percent}}</td>
+                        <td>{{player_stats.most_won}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No player stats are available.</p>
+    {% endif %}
+    <h2>Against Others</h2>
+    {% autoescape off %}
+        {{ against_others_graph }}
+    {% endautoescape %}
+{% endblock %}
